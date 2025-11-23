@@ -310,3 +310,11 @@ Cluster name that shows up in dashboard metrics
 {{- define "tempo.clusterName" -}}
 {{ (include "tempo.calculatedConfig" . | fromYaml).cluster_name | default .Release.Name }}
 {{- end -}}
+
+{{/*
+Memcached Cluster Suffix
+*/}}
+{{- define "tempo.memcached.suffix" -}}
+{{- $suffix := default "" . -}}
+{{ if ne $suffix "" }}-{{ $suffix }}{{ end }}
+{{- end }}

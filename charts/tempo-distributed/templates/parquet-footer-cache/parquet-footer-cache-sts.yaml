@@ -1,0 +1,1 @@
+{{- include "tempo.memcached.statefulSet" (dict "ctx" $ "memcacheConfig" .Values.parquetFooterCache "valuesSection" "parquetFooterCache" "component" "parquet-footer-cache" ) }}
