@@ -1,4 +1,4 @@
-{{- if .Values.memcached.enabled }}
+{{- if and .Values.memcached.enabled ( not (.Values.parquetFooterCache.enabled or .Values.bloomCache.enabled or .Values.frontendSearchCache.enabled)) }}
 {{ $dict := dict "ctx" . "component" "memcached" }}
 apiVersion: apps/v1
 kind: StatefulSet

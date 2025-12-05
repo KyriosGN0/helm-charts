@@ -1,0 +1,1 @@
+{{- include "tempo.memcached.statefulSet" (dict "ctx" $ "memcacheConfig" .Values.frontendSearchCache "valuesSection" "frontendSearchCache" "component" "frontend-search-cache" ) }}

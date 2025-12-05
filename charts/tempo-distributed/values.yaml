@@ -1740,7 +1740,7 @@ per_tenant_overrides:
 # you can use your own self deployed memcached by setting `memcached.enabled` to false and `memcached.host` + `memcached.service`
 memcached:
   # -- Specified whether the memcached cachce should be enabled
-  enabled: true
+  enabled: false
   image:
     # -- The Docker registry for the Memcached image. Overrides `global.image.registry`
     registry: null
@@ -1849,6 +1849,208 @@ memcachedExporter:
   extraArgs: []
 
 parquetFooterCache:
+  # -- Specifies whether memcached based parquet-footer cache should be enabled
+  enabled: true
+
+  # -- Total number of tempo replicas
+  replicas: 1
+
+  # -- Port of the tempo service
+  port: 11211
+
+  # -- Amount of memory allocated to tempo for object storage (in MB).
+  allocatedMemory: 8192
+
+  # -- Maximum item memory for tempo (in MB).
+  maxItemMemory: 5
+
+  # -- Maximum number of connections allowed
+  connectionLimit: 4096
+
+  # -- Extra init containers for tempo pods
+  initContainers: []
+
+  # -- Annotations for the tempo pods
+  annotations: {}
+  # -- Node selector for tempo pods
+  nodeSelector: {}
+  # -- Affinity for tempo pods
+  affinity: {}
+  dnsConfig: {}
+
+  # -- topologySpreadConstraints allows to customize the default topologySpreadConstraints. This can be either a single dict as shown below or a slice of topologySpreadConstraints.
+  topologySpreadConstraints: {}
+  #  maxSkew: 1
+  #  topologyKey: kubernetes.io/hostname
+  #  whenUnsatisfiable: ScheduleAnyway
+  #  minDomains: 1
+  #  nodeAffinityPolicy: Honor
+  #  nodeTaintsPolicy: Honor
+  #  matchLabelKeys:
+  #    - pod-template-hash
+
+  # -- Tolerations for tempo pods
+  tolerations: []
+  # -- Pod Disruption Budget
+  podDisruptionBudget:
+    maxUnavailable: 1
+  # -- The name of the PriorityClass for tempo pods
+  priorityClassName: null
+  # -- Labels for tempo pods
+  podLabels: {}
+  # -- Annotations for tempo pods
+  podAnnotations: {}
+  # -- Management policy for tempo pods
+  podManagementPolicy: Parallel
+  # -- Grace period to allow the tempo to shutdown before it is killed
+  terminationGracePeriodSeconds: 30
+
+  # -- Stateful tempo strategy
+  statefulStrategy:
+    type: RollingUpdate
+
+  # -- Add extended options for tempo memcached container. The format is the same as for the memcached -o/--extend flag.
+  # Example:
+  # extraExtendedOptions: 'tls,no_hashexpand'
+  extraExtendedOptions: ""
+
+  # -- Additional CLI args for tempo
+  extraArgs: {}
+
+  # -- Additional containers to be added to the tempo pod.
+  extraContainers: []
+
+  # -- Additional volumes to be added to the tempo pod (applies to both memcached and exporter containers).
+  # Example:
+  # extraVolumes:
+  # - name: extra-volume
+  #   secret:
+  #    secretName: extra-volume-secret
+  extraVolumes: []
+
+  # -- Additional volume mounts to be added to the tempo pod (applies to both memcached and exporter containers).
+  # Example:
+  # extraVolumeMounts:
+  # - name: extra-volume
+  #   mountPath: /etc/extra-volume
+  #   readOnly: true
+  extraVolumeMounts: []
+
+  # -- List of additional PVCs to be created for the tempo statefulset
+  volumeClaimTemplates: []
+
+  # -- Resource requests and limits for the tempo
+  # By default a safe memory limit will be requested based on allocatedMemory value (floor (* 1.2 allocatedMemory)).
+  resources: null
+
+  # -- Service annotations and labels
+  service:
+    annotations: {}
+    labels: {}
+    extraPorts: []
+
+bloomCache:
+  # -- Specifies whether memcached based bloom cache should be enabled
+  enabled: true
+
+  # -- Total number of tempo replicas
+  replicas: 1
+
+  # -- Port of the tempo service
+  port: 11211
+
+  # -- Amount of memory allocated to tempo for object storage (in MB).
+  allocatedMemory: 8192
+
+  # -- Maximum item memory for tempo (in MB).
+  maxItemMemory: 5
+
+  # -- Maximum number of connections allowed
+  connectionLimit: 4096
+
+  # -- Extra init containers for tempo pods
+  initContainers: []
+
+  # -- Annotations for the tempo pods
+  annotations: {}
+  # -- Node selector for tempo pods
+  nodeSelector: {}
+  # -- Affinity for tempo pods
+  affinity: {}
+  dnsConfig: {}
+
+  # -- topologySpreadConstraints allows to customize the default topologySpreadConstraints. This can be either a single dict as shown below or a slice of topologySpreadConstraints.
+  topologySpreadConstraints: {}
+  #  maxSkew: 1
+  #  topologyKey: kubernetes.io/hostname
+  #  whenUnsatisfiable: ScheduleAnyway
+  #  minDomains: 1
+  #  nodeAffinityPolicy: Honor
+  #  nodeTaintsPolicy: Honor
+  #  matchLabelKeys:
+  #    - pod-template-hash
+
+  # -- Tolerations for tempo pods
+  tolerations: []
+  # -- Pod Disruption Budget
+  podDisruptionBudget:
+    maxUnavailable: 1
+  # -- The name of the PriorityClass for tempo pods
+  priorityClassName: null
+  # -- Labels for tempo pods
+  podLabels: {}
+  # -- Annotations for tempo pods
+  podAnnotations: {}
+  # -- Management policy for tempo pods
+  podManagementPolicy: Parallel
+  # -- Grace period to allow the tempo to shutdown before it is killed
+  terminationGracePeriodSeconds: 30
+
+  # -- Stateful tempo strategy
+  statefulStrategy:
+    type: RollingUpdate
+
+  # -- Add extended options for tempo memcached container. The format is the same as for the memcached -o/--extend flag.
+  # Example:
+  # extraExtendedOptions: 'tls,no_hashexpand'
+  extraExtendedOptions: ""
+
+  # -- Additional CLI args for tempo
+  extraArgs: {}
+
+  # -- Additional containers to be added to the tempo pod.
+  extraContainers: []
+
+  # -- Additional volumes to be added to the tempo pod (applies to both memcached and exporter containers).
+  # Example:
+  # extraVolumes:
+  # - name: extra-volume
+  #   secret:
+  #    secretName: extra-volume-secret
+  extraVolumes: []
+
+  # -- Additional volume mounts to be added to the tempo pod (applies to both memcached and exporter containers).
+  # Example:
+  # extraVolumeMounts:
+  # - name: extra-volume
+  #   mountPath: /etc/extra-volume
+  #   readOnly: true
+  extraVolumeMounts: []
+
+  # -- List of additional PVCs to be created for the tempo statefulset
+  volumeClaimTemplates: []
+
+  # -- Resource requests and limits for the tempo
+  # By default a safe memory limit will be requested based on allocatedMemory value (floor (* 1.2 allocatedMemory)).
+  resources: null
+
+  # -- Service annotations and labels
+  service:
+    annotations: {}
+    labels: {}
+    extraPorts: []
+
+frontendSearchCache:
   # -- Specifies whether memcached based parquet-footer cache should be enabled
   enabled: true
 

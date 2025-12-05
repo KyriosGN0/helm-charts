@@ -3,7 +3,7 @@ memcached StatefulSet
 */}}
 {{- define "tempo.memcached.statefulSet" -}}
 {{ with $.memcacheConfig }}
-{{- if and .enabled ($.ctx.Values.memcached.enabled) -}}
+{{- if .enabled -}}
 apiVersion: apps/v1
 kind: StatefulSet
 metadata:

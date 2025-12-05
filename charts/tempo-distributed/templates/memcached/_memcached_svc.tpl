@@ -2,8 +2,8 @@
 memcached Service
 */}}
 {{- define "tempo.memcached.service" -}}
-{{ with ($.ctx.Values $.component) }}
-{{- if .enabled -}}
+{{ with $.memcacheConfig }}
+{{- if and .enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
