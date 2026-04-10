@@ -168,6 +168,9 @@ spec:
   - name: memcached-client
     port: 11211
     targetPort: client
+  - name: http-metrics
+    port: 9150
+    targetPort: http-metrics
   selector:
     {{- include "tempo.selectorLabels" $dict | nindent 4 }}
 {{- end }}

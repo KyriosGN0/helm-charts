@@ -94,6 +94,9 @@ tests:
       - matchRegex:
           path: data["tempo.yaml"]
           pattern: "memcached-frontend-search"
+      - notMatchRegex:
+          path: data["tempo.yaml"]
+          pattern: "host: .*-memcached\n"
 
   - it: custom timeout respected for bloom
     set:
@@ -103,3 +106,21 @@ tests:
       - matchRegex:
           path: data["tempo.yaml"]
           pattern: "timeout: 1s"
+
+  - it: custom timeout respected for parquet-footer
+    set:
+      memcachedParquetFooter.enabled: true
+      memcachedParquetFooter.timeout: 2s
+    asserts:
+      - matchRegex:
+          path: data["tempo.yaml"]
+          pattern: "timeout: 2s"
+
+  - it: custom timeout respected for frontend-search
+    set:
+      memcachedFrontendSearch.enabled: true
+      memcachedFrontendSearch.timeout: 750ms
+    asserts:
+      - matchRegex:
+          path: data["tempo.yaml"]
+          pattern: "timeout: 750ms"
