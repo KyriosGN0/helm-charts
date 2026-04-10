@@ -16,6 +16,10 @@ metadata:
   namespace: {{ $.ctx.Release.Namespace }}
   labels:
     {{- include "tempo.labels" $dict | nindent 4 }}
+  {{- with $.memcachedConfig.annotations }}
+  annotations:
+    {{- toYaml . | nindent 4 }}
+  {{- end }}
 spec:
   replicas: {{ $.memcachedConfig.replicas }}
   revisionHistoryLimit: {{ $.ctx.Values.tempo.revisionHistoryLimit }}
@@ -52,8 +56,15 @@ spec:
         {{- toYaml . | nindent 8 }}
       {{- end }}
       enableServiceLinks: false
+      {{- include "tempo.componentImagePullSecrets" (dict "ctx" $.ctx "component" "memcached-exporter" "noTempoFallback" true) | nindent 6 -}}
+      {{- with $.ctx.Values.memcachedExporter.hostAliases }}
+      hostAliases:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with $.memcachedConfig.initContainers }}
       initContainers:
-        {{- toYaml $.memcachedConfig.initContainers | nindent 8 }}
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
       containers:
         - image: {{ include "tempo.imageReference" (dict "ctx" $.ctx "component" "memcached") }}
           imagePullPolicy: {{ $.ctx.Values.memcached.image.pullPolicy }}
@@ -110,6 +121,30 @@ spec:
           volumeMounts:
             {{- toYaml . | nindent 12 }}
           {{- end }}
+        {{- if $.ctx.Values.memcachedExporter.enabled }}
+        - args:
+            - --memcached.address=localhost:11211
+            - --web.listen-address=0.0.0.0:9150
+          {{- with $.ctx.Values.memcachedExporter.extraArgs }}
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          image: {{ include "tempo.imageReference" (dict "ctx" $.ctx "component" "memcached-exporter") }}
+          imagePullPolicy: {{ $.ctx.Values.memcachedExporter.image.pullPolicy }}
+          name: exporter
+          ports:
+            - containerPort: 9150
+              name: http-metrics
+          resources:
+            {{- toYaml $.ctx.Values.memcachedExporter.resources | nindent 12 }}
+          {{- with $.ctx.Values.tempo.securityContext }}
+          securityContext:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+          {{- with $.memcachedConfig.extraVolumeMounts }}
+          volumeMounts:
+            {{- toYaml . | nindent 12 }}
+          {{- end }}
+        {{- end }}
         {{- with $.memcachedConfig.extraContainers }}
         {{- toYaml . | nindent 8 }}
         {{- end }}

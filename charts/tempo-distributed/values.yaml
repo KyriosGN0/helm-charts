@@ -1943,6 +1943,8 @@ memcachedExporter:
 memcachedBloom:
   # -- Enable a dedicated memcached cluster for the bloom cache role
   enabled: false
+  # -- Annotations for the memcached-bloom StatefulSet
+  annotations: {}
   # -- Number of replicas for the bloom memcached StatefulSet
   replicas: 1
   # -- Timeout for bloom cache operations
@@ -2028,6 +2030,8 @@ memcachedBloom:
 memcachedParquetFooter:
   # -- Enable a dedicated memcached cluster for the parquet-footer cache role
   enabled: false
+  # -- Annotations for the memcached-parquet-footer StatefulSet
+  annotations: {}
   # -- Number of replicas for the parquet-footer memcached StatefulSet
   replicas: 1
   # -- Timeout for parquet-footer cache operations
@@ -2113,6 +2117,8 @@ memcachedParquetFooter:
 memcachedFrontendSearch:
   # -- Enable a dedicated memcached cluster for the frontend-search cache role
   enabled: false
+  # -- Annotations for the memcached-frontend-search StatefulSet
+  annotations: {}
   # -- Number of replicas for the frontend-search memcached StatefulSet
   replicas: 1
   # -- Timeout for frontend-search cache operations
